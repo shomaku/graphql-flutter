@@ -70,7 +70,7 @@ class _SubscriptionHookState<TParsed> extends HookState<
   late Stream<QueryResult<TParsed>> stream;
 
   ConnectivityResult? _currentConnectivityResult;
-  StreamSubscription<ConnectivityResult>? _networkSubscription;
+  StreamSubscription<List<ConnectivityResult>>? _networkSubscription;
 
   void _initSubscription() {
     final client = hook.client;
@@ -107,8 +107,9 @@ class _SubscriptionHookState<TParsed> extends HookState<
     super.dispose();
   }
 
-  Future<void> _onNetworkChange(ConnectivityResult result) async {
+  void _onNetworkChange(List<ConnectivityResult> results) async {
     //if from offline to online
+    final result = results.last;
     if (_currentConnectivityResult == ConnectivityResult.none &&
         (result == ConnectivityResult.mobile ||
             result == ConnectivityResult.wifi)) {
